@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Teste02 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite um número inteiro: ");
+        int numero = scanner.nextInt();
+
+        int numeroAnterior = 0;
+        int numeroAtual = 1;
+        int proximoNumero = numeroAnterior + numeroAtual;
+
+        while (proximoNumero <= numero) {
+            if (proximoNumero == numero) {
+                System.out.println(numero + " pertence à sequência de Fibonacci.");
+                return;
+            }
+            numeroAnterior = numeroAtual;
+            numeroAtual = proximoNumero;
+            proximoNumero = numeroAnterior + numeroAtual;
+        }
+
+        System.out.println(numero + " não pertence à sequência de Fibonacci.");
+    }
+}
+

@@ -1,0 +1,63 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+
+public class Teste03 {
+    public static void main(String[] args) {
+        JSONParser parser = new JSONParser();
+        try {
+            // Lê o arquivo JSON com os dados de faturamento diário
+            Object obj = parser.parse(new FileReader("dados.json"));
+            JSONArray jsonArray = (JSONArray) obj;
+
+            double menorFaturamento = Double.parseDouble(((JSONObject) jsonArray.get(0)).get("valor").toString());
+            double maiorFaturamento = Double.parseDouble(((JSONObject) jsonArray.get(0)).get("valor").toString());
+            double somaFaturamento = 0.0;
+            int diasComFaturamento = 0;
+
+            // Calcula o menor valor de faturamento, o maior valor de faturamento e a soma dos valores de faturamento
+            Iterator<JSONObject> it = jsonArray.iterator();
+            while (it.hasNext()) {
+                JSONObject jsonObject = it.next();
+                double valor = Double.parseDouble(jsonObject.get("valor").toString());
+                if(valor != 0) {
+                	if (valor < menorFaturamento && valor != 0) {
+                        menorFaturamento = valor;
+                    }
+                    if (valor > maiorFaturamento) {
+                        maiorFaturamento = valor;
+                    }
+                    somaFaturamento += valor;
+                    diasComFaturamento++;
+                }
+                
+            }
+
+            double mediaMensal = somaFaturamento / jsonArray.size();
+            int diasAcimaDaMedia = 0;
+
+            // Conta o número de dias em que o valor de faturamento diário foi superior à média mensal
+            it = jsonArray.iterator();
+            while (it.hasNext()) {
+                JSONObject jsonObject = it.next();
+                double valor = Double.parseDouble(jsonObject.get("valor").toString());
+                if (valor > mediaMensal && valor != 0) {
+                    diasAcimaDaMedia++;
+                }
+            }
+
+            System.out.println(mediaMensal);
+            System.out.println("Menor faturamento: R$" + menorFaturamento);
+            System.out.println("Maior faturamento: R$" + maiorFaturamento);
+            System.out.println("Número de dias em que o faturamento diário foi superior à média mensal: " + diasAcimaDaMedia);
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+}
